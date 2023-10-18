@@ -82,16 +82,8 @@ def image_diff(image1, image2):
     '''Compare two images.'''
 
     # If arguments are filenames, read the image data
-    if type(image1) is str:
-        img1 = cv2.imread(image1, 0)
-    else:
-        img1 = image1
-
-    if type(image2) is str:
-        img2 = cv2.imread(image2, 0)
-    else:
-        img2 = image2
-
+    img1 = cv2.imread(image1, 0) if type(image1) is str else image1
+    img2 = cv2.imread(image2, 0) if type(image2) is str else image2
     # Initiate feature detector
     ifd = cv2.ORB()
 
@@ -105,12 +97,7 @@ def image_diff(image1, image2):
     # Match descriptors.
     matches = fm.knnMatch(des1, des2, k=2)
 
-    # Apply ratio test
-    good = []
-    for m,n in matches:
-        if m.distance < 0.75 * n.distance:
-            good.append(m)
-
+    good = [m for m, n in matches if m.distance < 0.75 * n.distance]
     # Draw matches
     # diff_img = cv2.drawMatches(img1, kp1, img2, kp2, good, None,flags=2)
     diff_img = drawMatches(img1, kp1, img2, kp2, good)
