@@ -9,15 +9,13 @@ dst_file = 'samples.csv'
 
 files = [f for f in listdir(src) if f.find('.png') > 0]
 
-with open(dst + '/' + dst_file, 'wb') as outfile:
+with open(f'{dst}/{dst_file}', 'wb') as outfile:
     writer = csv.writer(outfile, delimiter=',')
-    idx = 0
-    for f in files:
+    for idx, f in enumerate(files):
         basename, ext = path.splitext(path.basename(f))
         id_ = basename
         new_f = '%03d%s' % (idx, ext)
         writer.writerow([new_f, id_])
-        copyfile(src + '/' + f, dst + '/' + new_f)
-        idx += 1
+        copyfile(f'{src}/{f}', f'{dst}/{new_f}')
 
 
